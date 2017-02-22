@@ -36,6 +36,7 @@ namespace Tests
         [Test]
         public void ReturnCorrectAssemblyReferences()
         {
+            var testFixtureAttribute = typeof(TestFixtureAttribute).TypeDefinition()
             var mainModule = ModuleDefinition?.Assembly?.MainModule;
             var assemblyNameReferences = mainModule?.AssemblyReferences;
         }
