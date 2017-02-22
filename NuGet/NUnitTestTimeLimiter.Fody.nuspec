@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata minClientVersion="2.8">
+    <id>NUnitTestTimeLimiter.Fody</id>
+    <version>$version$</version>
+    <title>NUnitTestTimeLimiter.Fody</title>
+    <authors>Attila Tamas Zimler</authors>
+    <owners>Attila Tamas Zimler</owners>
+    <developmentDependency>true</developmentDependency>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://github.com/Fody/BasicFodyAddin</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://raw.github.com/Fody/BasicFodyAddin/master/Icons/package_icon.png</iconUrl>
+    <description>
+Fody add-in for weaving NUnit Timeout tags on the TestFixture classes with a global maximum. Depending on your setting the slow unit tests are going to fail after the timeout period.
+      
+The goal is to catch all incorrectly written NUnit tests to execute quickly and thus provide the possibility to use them in TDD scenario.    
+    </description>
+    <summary />
+    <language>en-AU</language>
+    <tags>ILWeaving, Fody, Cecil, NUnit, Timeout</tags>
+    <dependencies>
+      <dependency id="Fody"/>
+    </dependencies>
+  </metadata>
+</package>
