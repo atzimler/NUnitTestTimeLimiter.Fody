@@ -19,7 +19,7 @@ namespace Tests
         {
             var assemblyToProcessModuleDefinition = ModuleDefinition.ReadModule(AssemblyPath);
             var testFixtureClass = typeof(TestFixtureWithoutTimeout).TypeDefinition(assemblyToProcessModuleDefinition);
-            var testFixtureAttribute = typeof(TestFixtureAttribute).TypeReference(NUnitModuleDefinition);
+            var testFixtureAttribute = ModuleDefinition.ImportReference(typeof(TestFixtureAttribute));
 
             Assert.IsTrue(testFixtureClass?.HasAttribute(testFixtureAttribute));
         }
@@ -29,7 +29,7 @@ namespace Tests
         {
             var assemblyToProcessModuleDefinition = ModuleDefinition.ReadModule(AssemblyPath);
             var testFixtureClass = typeof(TestFixtureWithoutTimeout).TypeDefinition(assemblyToProcessModuleDefinition);
-            var timeoutAttribute = typeof(TimeoutAttribute).TypeReference(NUnitModuleDefinition);
+            var timeoutAttribute = ModuleDefinition.ImportReference(typeof(TimeoutAttribute));
 
             Assert.IsFalse(testFixtureClass?.HasAttribute(timeoutAttribute));
         }

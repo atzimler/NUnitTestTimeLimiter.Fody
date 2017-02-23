@@ -15,10 +15,5 @@ namespace NUnitTestTimeLimiter.Fody
             var typeDefinitions = types.Where(t => t?.FullName == type.FullName).ToList();
             return typeDefinitions.Count != 1 ? null : typeDefinitions[0];
         }
-
-        public static TypeReference TypeReference([NotNull] this Type type, [NotNull] ModuleDefinition module)
-        {
-            return TypeDefinition(type, module);
-        }
     }
 }

@@ -54,7 +54,7 @@ public class ModuleWeaver
                 throw new InvalidOperationException($"{nameof(ModuleDefinition)} == null");
             }
 
-            var testFixtureAttribute = typeof(TestFixtureAttribute).TypeReference(ModuleDefinition);
+            var testFixtureAttribute = ModuleDefinition.ImportReference(typeof(TestFixtureAttribute));
 
             var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
             var moduleDefinitions = assemblyDefinition.ModuleDefinitions();

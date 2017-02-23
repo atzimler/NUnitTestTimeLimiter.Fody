@@ -24,7 +24,7 @@ namespace Tests
         [Test]
         public void EnumerateTheCorrectNumberOfClassesWithTestFixtureAttribute()
         {
-            var testFixtureAttribute = typeof(TestFixtureAttribute).TypeReference(NUnitModuleDefinition);
+            var testFixtureAttribute = ModuleDefinition.ImportReference(typeof(TestFixtureAttribute));
             var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
             var moduleDefinitions = assemblyDefinition.ModuleDefinitions();
             var types = moduleDefinitions.TypeDefinitionsWithAttribute(testFixtureAttribute);
