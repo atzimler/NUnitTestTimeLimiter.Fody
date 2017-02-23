@@ -29,6 +29,19 @@ namespace Tests
             return GetTimeoutAttributes(type).Any();
         }
 
+        private int? Timeout([NotNull] Type type)
+        {
+            var attribute = GetTimeoutAttributes(type).FirstOrDefault();
+            if (attribute == null)
+            {
+                return null;
+            }
+
+            var fieldInfo = typeof(TimeoutAttribute).GetField("_timeout", BindingFlags.NonPublic | BindingFlags.Instance);
+            var value = fieldInfo?.GetValue(attribute);
+            return (int?)value;
+        }
+
         [OneTimeSetUp]
         public void Setup()
         {
@@ -62,13 +75,26 @@ namespace Tests
         }
 
         [Test]
-        public void ValidateHelloWorldIsInjected()
+        public void TestFixtureWithLowerTimeoutIsNotModified()
         {
-            //var type = _assembly.GetType("Hello");
-            //var instance = (dynamic)Activator.CreateInstance(type);
-
-            //Assert.AreEqual("Hello World", instance.World());
+            Assert.IsTrue(HasTimeoutAttribute(typeof(TestFixtureWithLowerTimeout)));
+            Assert.AreEqual(1000, Timeout(typeof(TestFixtureWithLowerTimeout)));
         }
+
+        [Test]
+        public void TestFixtureWithCorrectTimeoutIsUnchanged()
+        {
+            Assert.IsTrue(HasTimeoutAttribute(typeof(TestFixtureWithCorrectTimeout)));
+            Assert.AreEqual(2000, Timeout(typeof(TestFixtureWithCorrectTimeout)));
+        }
+
+        [Test]
+        public void TestFixtureWithHigherTimeoutIsAdjusted()
+        {
+            Assert.IsTrue(HasTimeoutAttribute(typeof(TestFixtureWithHigherTimeout)));
+            Assert.AreEqual(2000, Timeout(typeof(TestFixtureWithHigherTimeout)));
+        }
+
 
 #if(DEBUG)
         [Test]
