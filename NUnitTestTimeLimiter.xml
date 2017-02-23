@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project name="NUnitTestTimeLimiter.xml" default="help">
+  <description>Build file for NUnitTestTimeLimiter Fody weaver.</description>
+  
+  <property name="project.name" value="NUnitTestTimeLimiter"/>
+  <include buildfile="../NAnt/ATZ.Build.xml"/>
+</project>
