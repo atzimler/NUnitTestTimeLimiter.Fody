@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using Mono.Cecil;
+using NUnit.Framework;
+using NUnitTestTimeLimiter.Fody;
+using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Configuration;
-using JetBrains.Annotations;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Mono.Collections.Generic;
-using NUnit.Framework;
-using NUnit.Framework.Internal;
-using NUnitTestTimeLimiter.Fody;
-using MethodAttributes = Mono.Cecil.MethodAttributes;
 
 // ReSharper disable once CheckNamespace => This is the convention suggested by the BasicFodyAddin Fody template.
 public class ModuleWeaver
@@ -37,63 +31,39 @@ public class ModuleWeaver
         };
     }
 
+    private void SetTimeout([NotNull] TypeDefinition typeDefinition)
+    {
+        if (typeDefinition.CustomAttributes.Any(ca => ca.AttributeType.FullName == typeof(TimeoutAttribute).FullName))
+        {
+            return;
+        }
+
+        var attributeConstructor =
+            ModuleDefinition.ImportReference(typeof(TimeoutAttribute).GetConstructor(new[] { typeof(int) }));
+        var attribute = new CustomAttribute(attributeConstructor);
+        attribute.ConstructorArguments.Add(new CustomAttributeArgument(ModuleDefinition.TypeSystem.Int32, 2000));
+        typeDefinition.CustomAttributes.Add(attribute);
+    }
+
     public void Execute()
     {
         try
         {
+            if (ModuleDefinition == null)
+            {
+                throw new InvalidOperationException($"{nameof(ModuleDefinition)} == null");
+            }
+
             var testFixtureAttribute = typeof(TestFixtureAttribute).TypeReference(ModuleDefinition);
 
-            var assemblyDefinition = ModuleDefinition.GetAssemblyDefinition();
-            var moduleDefinitions = assemblyDefinition.GetModuleDefinitions();
-            var types = moduleDefinitions.GetTypeDefinitionsWithAttribute(testFixtureAttribute);
-            foreach (var type in types)
-            {
-                LogInfo(type.FullName);
-            }
+            var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
+            var moduleDefinitions = assemblyDefinition.ModuleDefinitions();
+            var types = moduleDefinitions.TypeDefinitionsWithAttribute(testFixtureAttribute);
+            types.ToList().ForEach(SetTimeout);
         }
         catch (Exception ex)
         {
             LogInfo($"Caught exception: {ex.Message}, {ModuleConstants.ModuleName} weawing aborted!");
         }
-        //if (ModuleDefinition == null)
-        //{
-        //    LogInfo("ModuleDefinition == null, aborting!");
-        //    return;
-        //}
-
-        //var assembly = ModuleDefinition.Assembly;
-
-        //_typeSystem = ModuleDefinition.TypeSystem;
-
-
-        //var newType = new TypeDefinition(null, "Hello", TypeAttributes.Public, _typeSystem.Object);
-
-        //AddConstructor(newType);
-
-        //AddHelloWorld(newType);
-
-        //ModuleDefinition.Types.Add(newType);
-        //LogInfo("Added type 'Hello' with method 'World'.");
     }
-
-
-    //void AddConstructor(TypeDefinition newType)
-    //{
-    //    var method = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, _typeSystem.Void);
-    //    var objectConstructor = ModuleDefinition.Import(_typeSystem.Object.Resolve().GetConstructors().First());
-    //    var processor = method.Body.GetILProcessor();
-    //    processor.Emit(OpCodes.Ldarg_0);
-    //    processor.Emit(OpCodes.Call, objectConstructor);
-    //    processor.Emit(OpCodes.Ret);
-    //    newType.Methods.Add(method);
-    //}
-
-    //void AddHelloWorld(TypeDefinition newType)
-    //{
-    //    var method = new MethodDefinition("World", MethodAttributes.Public, _typeSystem.String);
-    //    var processor = method.Body.GetILProcessor();
-    //    processor.Emit(OpCodes.Ldstr, "Hello World");
-    //    processor.Emit(OpCodes.Ret);
-    //    newType.Methods.Add(method);
-    //}
 }

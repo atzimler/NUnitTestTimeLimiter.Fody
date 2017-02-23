@@ -7,26 +7,16 @@ namespace NUnitTestTimeLimiter.Fody
 {
     public static class TypeExtensions
     {
-        public static AssemblyNameReference AssemblyNameReference([NotNull] this Type type)
+        public static TypeDefinition TypeDefinition([NotNull] this Type type, [NotNull] ModuleDefinition module)
         {
-            var assembly = type.Assembly;
-            var fullName = assembly.FullName;
-            var name = assembly.GetName();
-            var version = name.Version;
-
-            return new AssemblyNameReference(fullName, version);
-        }
-
-        public static TypeDefinition TypeDefinition([NotNull] this Type type, ModuleDefinition module)
-        {
-            var assembly = module.GetAssemblyDefinition();
-            var modules = assembly.GetModuleDefinitions();
-            var types = modules.SelectMany(t => t.Types);
+            var assemblies = module.Assembly?.ReferencedAssemblies() ?? Enumerable.Empty<AssemblyDefinition>();
+            var modules = assemblies.SelectMany(a => a.ModuleDefinitions()).Where(m => m != null);
+            var types = modules.SelectMany(m => m.Types);
             var typeDefinitions = types.Where(t => t?.FullName == type.FullName).ToList();
             return typeDefinitions.Count != 1 ? null : typeDefinitions[0];
         }
 
-        public static TypeReference TypeReference([NotNull] this Type type, ModuleDefinition module)
+        public static TypeReference TypeReference([NotNull] this Type type, [NotNull] ModuleDefinition module)
         {
             return TypeDefinition(type, module);
         }

@@ -17,7 +17,7 @@ namespace Tests
         [Test]
         public void ThrowArgumentNullExceptionIfModuleDefinitionIsNull()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => ModuleDefinitionExtensions.GetAssemblyDefinition(null));
+            var ex = Assert.Throws<ArgumentNullException>(() => ModuleDefinitionExtensions.AssemblyDefinition(null));
             Assert.AreEqual("Value cannot be null.\r\nParameter name: moduleDefinition", ex?.Message);
         }
 
@@ -25,9 +25,9 @@ namespace Tests
         public void EnumerateTheCorrectNumberOfClassesWithTestFixtureAttribute()
         {
             var testFixtureAttribute = typeof(TestFixtureAttribute).TypeReference(NUnitModuleDefinition);
-            var assemblyDefinition = ModuleDefinition.GetAssemblyDefinition();
-            var moduleDefinitions = assemblyDefinition.GetModuleDefinitions();
-            var types = moduleDefinitions.GetTypeDefinitionsWithAttribute(testFixtureAttribute);
+            var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
+            var moduleDefinitions = assemblyDefinition.ModuleDefinitions();
+            var types = moduleDefinitions.TypeDefinitionsWithAttribute(testFixtureAttribute);
             Assert.AreEqual(4, types.Count());
         }
     }

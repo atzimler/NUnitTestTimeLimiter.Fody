@@ -8,7 +8,7 @@ namespace NUnitTestTimeLimiter.Fody
 {
     public static class ModuleDefinitionExtensions
     {
-        public static AssemblyDefinition GetAssemblyDefinition(this ModuleDefinition moduleDefinition)
+        public static AssemblyDefinition AssemblyDefinition(this ModuleDefinition moduleDefinition)
         {
             if (moduleDefinition == null)
             {
@@ -20,7 +20,7 @@ namespace NUnitTestTimeLimiter.Fody
 
         [NotNull]
         [ItemNotNull]
-        public static IEnumerable<TypeDefinition> GetTypeDefinitionsWithAttribute(
+        public static IEnumerable<TypeDefinition> TypeDefinitionsWithAttribute(
             [NotNull] [ItemNotNull] this IEnumerable<ModuleDefinition> moduleDefinitions,
             TypeReference typeReference)
         {

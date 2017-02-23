@@ -1,12 +1,33 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using AssemblyToProcess;
+using NUnit.Framework;
+using System.Linq;
 using System.Reflection;
+using System.Security.Authentication;
+using JetBrains.Annotations;
 
+// FIXME: TypeSystem.LookupType(): TypeReference is probably a better implementation of mine.
 namespace Tests
 {
     [TestFixture]
     public class WeaverTests : WeaverTestBase
     {
         private Assembly _assembly;
+
+        [NotNull]
+        private IEnumerable<TimeoutAttribute> GetTimeoutAttributes([NotNull] Type type)
+        {
+            return _assembly?
+                       .GetType(type.FullName)?
+                       .GetCustomAttributes(typeof(TimeoutAttribute), true)
+                       .Select(o => o as TimeoutAttribute) ?? Enumerable.Empty<TimeoutAttribute>();
+        }
+
+        private bool HasTimeoutAttribute([NotNull] Type type)
+        {
+            return GetTimeoutAttributes(type).Any();
+        }
 
         [OneTimeSetUp]
         public void Setup()
@@ -26,6 +47,18 @@ namespace Tests
             ModuleDefinition.Write(NewAssemblyPath);
 
             _assembly = Assembly.LoadFile(NewAssemblyPath);
+        }
+
+        [Test]
+        public void NonTestFixtureClassIsNotAttributedWithTimeout()
+        {
+            Assert.IsFalse(HasTimeoutAttribute(typeof(NonTestFixtureClass)));
+        }
+
+        [Test]
+        public void TestFixtureWithoutTimeoutIsModifiedToHaveTimeout()
+        {
+            Assert.IsTrue(HasTimeoutAttribute(typeof(TestFixtureWithoutTimeout)));
         }
 
         [Test]

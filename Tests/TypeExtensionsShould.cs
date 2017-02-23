@@ -17,15 +17,15 @@ namespace Tests
         [Test]
         public void GiveBackCorrectTypeReference()
         {
-            Assert.IsNotNull(NUnitModuleDefinition?.Assembly?.Modules);
+            Assert.IsNotNull(ModuleDefinition);
+            Assert.IsNotNull(NUnitModuleDefinition?.Assembly);
 
-
-            var testFixtureAttribute = typeof(TestFixtureAttribute).TypeReference(NUnitModuleDefinition);
+            var testFixtureAttribute = typeof(TestFixtureAttribute).TypeReference(ModuleDefinition);
             var assembly = NUnitModuleDefinition.Assembly;
             var modules = assembly.Modules;
             var types = modules?.SelectMany(m => m?.Types) ?? Enumerable.Empty<TypeReference>();
 
-            var correct = types.Any(t => t == testFixtureAttribute);
+            var correct = types.Any(t => t?.FullName == testFixtureAttribute?.FullName);
             Assert.IsTrue(correct);
         }
 

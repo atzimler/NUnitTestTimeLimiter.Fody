@@ -21,13 +21,13 @@ namespace Tests
         [Test]
         public void ReturnEmptySequenceIfAssemblyDefinitionIsNull()
         {
-            Assert.AreEqual(0, AssemblyDefinitionExtensions.GetModuleDefinitions(null).Count());
+            Assert.AreEqual(0, AssemblyDefinitionExtensions.ModuleDefinitions(null).Count());
         }
 
         [Test]
         public void ReturnCorrectModules()
         {
-            var modules = _assemblyDefinition.GetModuleDefinitions().ToList();
+            var modules = _assemblyDefinition.ModuleDefinitions().ToList();
             Assert.AreEqual(1, modules.Count);
             Assert.IsNotNull(modules[0]);
             Assert.AreEqual("AssemblyToProcess2.dll", Path.GetFileName(modules[0].FullyQualifiedName));
@@ -36,9 +36,11 @@ namespace Tests
         [Test]
         public void ReturnCorrectAssemblyReferences()
         {
-            var testFixtureAttribute = typeof(TestFixtureAttribute).TypeDefinition()
-            var mainModule = ModuleDefinition?.Assembly?.MainModule;
-            var assemblyNameReferences = mainModule?.AssemblyReferences;
+            //Assert.AreEqual(-1, ModuleDefinition.Assembly.ReferencedAssemblies());
+            //var mainModule = ModuleDefinition?.Assembly?.MainModule;
+            //var assemblyNameReferences = mainModule?.AssemblyReferences;
+
+            var references = ModuleDefinition.Assembly.ReferencedAssemblies();
         }
     }
 }
