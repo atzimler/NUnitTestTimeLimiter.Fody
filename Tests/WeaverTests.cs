@@ -4,10 +4,8 @@ using AssemblyToProcess;
 using NUnit.Framework;
 using System.Linq;
 using System.Reflection;
-using System.Security.Authentication;
 using JetBrains.Annotations;
 
-// FIXME: TypeSystem.LookupType(): TypeReference is probably a better implementation of mine.
 namespace Tests
 {
     [TestFixture]

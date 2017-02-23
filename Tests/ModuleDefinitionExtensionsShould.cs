@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using AssemblyToProcess;
 using NUnit.Framework;
 using NUnitTestTimeLimiter.Fody;
-using Mono.Cecil;
 
 namespace Tests
 {

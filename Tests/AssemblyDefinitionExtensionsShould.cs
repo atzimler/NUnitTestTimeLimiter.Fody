@@ -32,15 +32,5 @@ namespace Tests
             Assert.IsNotNull(modules[0]);
             Assert.AreEqual("AssemblyToProcess2.dll", Path.GetFileName(modules[0].FullyQualifiedName));
         }
-
-        [Test]
-        public void ReturnCorrectAssemblyReferences()
-        {
-            //Assert.AreEqual(-1, ModuleDefinition.Assembly.ReferencedAssemblies());
-            //var mainModule = ModuleDefinition?.Assembly?.MainModule;
-            //var assemblyNameReferences = mainModule?.AssemblyReferences;
-
-            var references = ModuleDefinition.Assembly.ReferencedAssemblies();
-        }
     }
 }

@@ -70,9 +70,9 @@
       <Project>{e97e649f-b703-47e3-b18a-0871d3498742}</Project>
       <Name>AssemblyToProcess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NUnitTestTimeLimiter\NUnitTestTimeLimiter.csproj">
+    <ProjectReference Include="..\NUnitTestTimeLimiter.Fody\NUnitTestTimeLimiter.Fody.csproj">
       <Project>{c3578a7b-09a6-4444-9383-0deafa4958bd}</Project>
-      <Name>NUnitTestTimeLimiter</Name>
+      <Name>NUnitTestTimeLimiter.Fody</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
