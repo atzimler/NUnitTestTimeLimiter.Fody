@@ -60,8 +60,7 @@
   <ItemGroup>
     <Compile Include="AssemblyDefinitionExtensionsShould.cs" />
     <Compile Include="ModuleDefinitionExtensionsShould.cs" />
-    <Compile Include="TypeDefinitionExtensionsShould.cs" />
-    <Compile Include="TypeExtensionsShould.cs" />
+    <Compile Include="TypeDefinitionExtensions.cs" />
     <Compile Include="Verifier.cs" />
     <Compile Include="WeaverTestBase.cs" />
     <Compile Include="WeaverTests.cs" />

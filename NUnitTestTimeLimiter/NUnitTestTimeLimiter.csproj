@@ -69,7 +69,6 @@
     <Compile Include="ModuleDefinitionExtensions.cs" />
     <Compile Include="ModuleWeaver.cs" />
     <Compile Include="TypeDefinitionExtensions.cs" />
-    <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -18,6 +18,16 @@ namespace NUnitTestTimeLimiter.Fody
             return moduleDefinition.Assembly;
         }
 
+        public static TypeDefinition ImportDefinition(this ModuleDefinition moduleDefinition, TypeReference typeRefence)
+        {
+            var assemblies = moduleDefinition?.Assembly?.ReferencedAssemblies() ??
+                             Enumerable.Empty<AssemblyDefinition>();
+            var modules = assemblies.SelectMany(a => a.ModuleDefinitions()).Where(m => m != null);
+            var types = modules.SelectMany(m => m.Types);
+            var typeDefinitions = types.Where(t => t?.FullName == typeRefence?.FullName).Take(2).ToList();
+            return typeDefinitions.Count != 1 ? null : typeDefinitions[0];
+        }
+
         [NotNull]
         [ItemNotNull]
         public static IEnumerable<TypeDefinition> TypeDefinitionsWithAttribute(

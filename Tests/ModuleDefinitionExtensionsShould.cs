@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using AssemblyToProcess;
 using NUnit.Framework;
 using NUnitTestTimeLimiter.Fody;
+using Mono.Cecil;
 
 namespace Tests
 {
@@ -24,7 +26,7 @@ namespace Tests
         [Test]
         public void EnumerateTheCorrectNumberOfClassesWithTestFixtureAttribute()
         {
-            var testFixtureAttribute = ModuleDefinition.ImportReference(typeof(TestFixtureAttribute));
+            var testFixtureAttribute = ModuleDefinition?.ImportReference(typeof(TestFixtureAttribute));
             var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
             var moduleDefinitions = assemblyDefinition.ModuleDefinitions();
             var types = moduleDefinitions.TypeDefinitionsWithAttribute(testFixtureAttribute);
