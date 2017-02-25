@@ -7,7 +7,6 @@ namespace Tests
     public class WeaverTestBase
     {
         protected ModuleDefinition ModuleDefinition;
-        protected ModuleDefinition NUnitModuleDefinition { get; private set; }
         protected string NewAssemblyPath { get; private set; }
         protected string AssemblyPath { get; private set; }
 
@@ -25,9 +24,6 @@ namespace Tests
             File.Copy(AssemblyPath, NewAssemblyPath, true);
 
             ModuleDefinition = ModuleDefinition.ReadModule(NewAssemblyPath);
-
-            var nUnitPath = AssemblyPath.Replace("AssemblyToProcess.dll", "nunit.framework.dll");
-            NUnitModuleDefinition = ModuleDefinition.ReadModule(nUnitPath);
         }
     }
 }

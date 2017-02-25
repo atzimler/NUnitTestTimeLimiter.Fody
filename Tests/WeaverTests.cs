@@ -17,9 +17,14 @@ namespace Tests
         [NotNull]
         private IEnumerable<TimeoutAttribute> GetTimeoutAttributes([NotNull] Type type)
         {
+            var nunitAssembly = ModuleDefinition.ReferencedAssembly(ModuleWeaver.NUnitFrameworkAssembly);
+            var timeoutAttribute = nunitAssembly.MainModule.GetType(ModuleWeaver.NUnitFrameworkNamespace,
+                ModuleWeaver.TimoutAttribute);
+
             return _assembly?
                        .GetType(type.FullName)?
-                       .GetCustomAttributes(typeof(TimeoutAttribute), true)
+                       .GetCustomAttributes(true)
+                       .Where(ca => ca.GetType().FullName == timeoutAttribute.FullName)
                        .Select(o => o as TimeoutAttribute) ?? Enumerable.Empty<TimeoutAttribute>();
         }
 

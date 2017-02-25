@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Mono.Cecil;
-using NUnit.Framework;
 using NUnitTestTimeLimiter.Fody;
 using System;
 using System.Diagnostics;
@@ -12,9 +11,12 @@ using MoreLinq;
 // ReSharper disable once CheckNamespace => This is the convention suggested by the BasicFodyAddin Fody template.
 public class ModuleWeaver
 {
-    private const string NUnitFramework = "NUnit.Framework";
-    private const string TimoutAttribute = "TimeoutAttribute";
-    private const string TestFixtureAttribute = "TestFixtureAttribute";
+    // FIXME: The tests also use this information, so there is a feature missing, which in turn also has its tests missing.
+    // FIXME: Make these private again.
+    public const string NUnitFrameworkAssembly = "nunit.framework";
+    public const string NUnitFrameworkNamespace = "NUnit.Framework";
+    public const string TimoutAttribute = "TimeoutAttribute";
+    public const string TestFixtureAttribute = "TestFixtureAttribute";
 
 
     private const int DefaultTimeLimit = 2000;
@@ -44,37 +46,70 @@ public class ModuleWeaver
         };
     }
 
-    private static void AddTimeoutAttribute([NotNull] ModuleDefinition moduleDefinition, [NotNull] ICustomAttributeProvider typeDefinition)
+    private static void AddTimeoutAttribute(
+        [NotNull] ModuleDefinition moduleDefinition,
+        [NotNull] ICustomAttributeProvider typeDefinition,
+        [NotNull] TypeDefinition timeoutAttribute)
     {
-        var attributeConstructor =
-            moduleDefinition.ImportReference(typeof(TimeoutAttribute).GetConstructor(new[] { typeof(int) }));
+        var attributeConstructor = moduleDefinition.ImportReference(timeoutAttribute.GetConstructors().First(ctor => ctor.Parameters.Count == 1));
+        //var attributeConstructor =
+        //    moduleDefinition.ImportReference(timeoutAttribute.GetConstructors(new[] { typeof(int) }));
         var attribute = new CustomAttribute(attributeConstructor);
         attribute.ConstructorArguments?.Add(new CustomAttributeArgument(moduleDefinition.TypeSystem?.Int32, _timeLimit));
         typeDefinition.CustomAttributes?.Add(attribute);
     }
 
-    private static void SetTimeout([NotNull] ModuleDefinition moduleDefinition, TypeDefinition typeDefinition)
+    [NotNull]
+    private ModuleDefinition CheckIfModuleDefinitionIsSet()
+    {
+        if (ModuleDefinition == null)
+        {
+            throw new InvalidOperationException($"{nameof(ModuleDefinition)} == null");
+        }
+
+        return ModuleDefinition;
+    }
+
+    private static TypeDefinition LoadTypeDefinition(
+        [NotNull] AssemblyDefinition assemblyDefinition,
+        [NotNull] string @namespace,
+        [NotNull] string name
+    )
+    {
+        var typeDefinition = assemblyDefinition.MainModule?.GetType(@namespace, name);
+        if (typeDefinition == null)
+        {
+            throw new TypeLoadException($"Unable to load type {@namespace}.{name} from assembly {assemblyDefinition.FullName}");
+        }
+
+        return typeDefinition;
+    }
+
+    private static void SetTimeout(
+        [NotNull] ModuleDefinition moduleDefinition,
+        TypeDefinition typeDefinition,
+        [NotNull] TypeDefinition timeoutAttribute)
     {
         if (typeDefinition == null)
         {
             return;
         }
 
-        var timeoutAttribute = moduleDefinition.ImportReference(typeof(TimeoutAttribute));
         var hasTimeout = typeDefinition.HasAttribute(timeoutAttribute);
         if (hasTimeout)
         {
-            VerifyAndAdjustTimeoutAttribute(moduleDefinition, typeDefinition);
+            VerifyAndAdjustTimeoutAttribute(moduleDefinition, typeDefinition, timeoutAttribute);
             return;
         }
 
-        AddTimeoutAttribute(moduleDefinition, typeDefinition);
+        AddTimeoutAttribute(moduleDefinition, typeDefinition, timeoutAttribute);
     }
 
-    private static void VerifyAndAdjustTimeoutAttribute([NotNull] ModuleDefinition moduleDefinition,
-        [NotNull] TypeDefinition typeDefinition)
+    private static void VerifyAndAdjustTimeoutAttribute(
+        [NotNull] ModuleDefinition moduleDefinition,
+        [NotNull] TypeDefinition typeDefinition,
+        [NotNull] TypeDefinition timeoutAttribute)
     {
-        var timeoutAttribute = moduleDefinition.ImportReference(typeof(TimeoutAttribute));
         var attritube = typeDefinition.Attribute(timeoutAttribute);
         var maxTimeLimitArgument = new CustomAttributeArgument(moduleDefinition.TypeSystem?.Int32, _timeLimit);
         if (attritube?.ConstructorArguments == null)
@@ -113,24 +148,23 @@ public class ModuleWeaver
             //    }
             //}
 
-            var moduleDefinition = ModuleDefinition;
-            if (moduleDefinition == null)
-            {
-                throw new InvalidOperationException($"{nameof(ModuleDefinition)} == null");
-            }
+            var moduleDefinition = CheckIfModuleDefinitionIsSet();
+            var nunitAssembly = moduleDefinition.ReferencedAssembly(NUnitFrameworkAssembly);
 
-            //var nunitAssembly = moduleDefinition.ReferencedAssembly("nunit.framework");
+            var timeoutAttribute = LoadTypeDefinition(nunitAssembly, NUnitFrameworkNamespace, TimoutAttribute);
+            var testFixtureAttribute = LoadTypeDefinition(nunitAssembly, NUnitFrameworkNamespace, TestFixtureAttribute);
 
-            var testFixtureAttribute = moduleDefinition.ImportReference(typeof(TestFixtureAttribute));
+
 
             var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
             var moduleDefinitions = assemblyDefinition.ModuleDefinitions();
             var types = moduleDefinitions.TypeDefinitionsWithAttribute(testFixtureAttribute);
-            types.ForEach(td => SetTimeout(moduleDefinition, td));
+            types.ForEach(td => SetTimeout(moduleDefinition, td, timeoutAttribute));
         }
         catch (Exception ex)
         {
             LogInfo($"Caught exception: {ex.Message}, {ModuleConstants.ModuleName} weawing aborted!");
+            throw;
         }
     }
 }
