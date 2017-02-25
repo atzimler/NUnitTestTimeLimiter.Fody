@@ -17,14 +17,13 @@ namespace Tests
         [NotNull]
         private IEnumerable<TimeoutAttribute> GetTimeoutAttributes([NotNull] Type type)
         {
-            var nunitAssembly = ModuleDefinition.ReferencedAssembly(ModuleWeaver.NUnitFrameworkAssembly);
-            var timeoutAttribute = nunitAssembly.MainModule.GetType(ModuleWeaver.NUnitFrameworkNamespace,
-                ModuleWeaver.TimoutAttribute);
+            var nunitDefinition = new NUnitDefinition(ModuleDefinition);
 
             return _assembly?
                        .GetType(type.FullName)?
                        .GetCustomAttributes(true)
-                       .Where(ca => ca.GetType().FullName == timeoutAttribute.FullName)
+                       .Where(ca => ca != null)
+                       .Where(ca => ca.GetType().FullName == nunitDefinition.TimeoutAttributeFullName)
                        .Select(o => o as TimeoutAttribute) ?? Enumerable.Empty<TimeoutAttribute>();
         }
 
@@ -97,18 +96,6 @@ namespace Tests
         {
             Assert.IsTrue(HasTimeoutAttribute(typeof(TestFixtureWithHigherTimeout)));
             Assert.AreEqual(2000, Timeout(typeof(TestFixtureWithHigherTimeout)));
-        }
-
-        [Test]
-        public void TheWayToResolveNUnitAttributesWithoutNUnitReference()
-        {
-            var nunitAssembly = ModuleDefinition.ReferencedAssembly("nunit.framework");
-            Assert.IsNotNull(nunitAssembly);
-
-            var timeoutAttribute = nunitAssembly.MainModule.GetType("NUnit.Framework", "TimeoutAttribute");
-            Assert.IsNotNull(timeoutAttribute);
-
-            //var nunitAssembly = ModuleDefinition.Assembly.ReferencedAssemblies().FirstOrDefault(a => a.Name)
         }
 
 

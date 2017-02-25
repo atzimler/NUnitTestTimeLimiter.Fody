@@ -67,10 +67,13 @@
   <ItemGroup>
     <Compile Include="AssemblyDefinitionExtensions.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="AssemblyUri.cs" />
     <Compile Include="ModuleConstants.cs" />
     <Compile Include="ModuleDefinitionExtensions.cs" />
     <Compile Include="ModuleWeaver.cs" />
+    <Compile Include="NUnitDefinition.cs" />
     <Compile Include="TypeDefinitionExtensions.cs" />
+    <Compile Include="TypeReferenceExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="install.ps1" />

@@ -11,14 +11,6 @@ using MoreLinq;
 // ReSharper disable once CheckNamespace => This is the convention suggested by the BasicFodyAddin Fody template.
 public class ModuleWeaver
 {
-    // FIXME: The tests also use this information, so there is a feature missing, which in turn also has its tests missing.
-    // FIXME: Make these private again.
-    public const string NUnitFrameworkAssembly = "nunit.framework";
-    public const string NUnitFrameworkNamespace = "NUnit.Framework";
-    public const string TimoutAttribute = "TimeoutAttribute";
-    public const string TestFixtureAttribute = "TestFixtureAttribute";
-
-
     private const int DefaultTimeLimit = 2000;
     private static int _timeLimit = DefaultTimeLimit;
 
@@ -51,9 +43,14 @@ public class ModuleWeaver
         [NotNull] ICustomAttributeProvider typeDefinition,
         [NotNull] TypeDefinition timeoutAttribute)
     {
-        var attributeConstructor = moduleDefinition.ImportReference(timeoutAttribute.GetConstructors().First(ctor => ctor.Parameters.Count == 1));
-        //var attributeConstructor =
-        //    moduleDefinition.ImportReference(timeoutAttribute.GetConstructors(new[] { typeof(int) }));
+        var attributeConstructorReference = timeoutAttribute
+            .GetConstructors()?
+            .Where(ctor => ctor?.Parameters != null)
+            .FirstOrDefault(
+                ctor =>
+                    ctor.Parameters.Count == 1 &&
+                    TypeReferenceExtensions.EqualsFullName(ctor.Parameters[0]?.ParameterType, moduleDefinition.TypeSystem?.Int32));
+        var attributeConstructor = moduleDefinition.ImportReference(attributeConstructorReference);
         var attribute = new CustomAttribute(attributeConstructor);
         attribute.ConstructorArguments?.Add(new CustomAttributeArgument(moduleDefinition.TypeSystem?.Int32, _timeLimit));
         typeDefinition.CustomAttributes?.Add(attribute);
@@ -68,21 +65,6 @@ public class ModuleWeaver
         }
 
         return ModuleDefinition;
-    }
-
-    private static TypeDefinition LoadTypeDefinition(
-        [NotNull] AssemblyDefinition assemblyDefinition,
-        [NotNull] string @namespace,
-        [NotNull] string name
-    )
-    {
-        var typeDefinition = assemblyDefinition.MainModule?.GetType(@namespace, name);
-        if (typeDefinition == null)
-        {
-            throw new TypeLoadException($"Unable to load type {@namespace}.{name} from assembly {assemblyDefinition.FullName}");
-        }
-
-        return typeDefinition;
     }
 
     private static void SetTimeout(
@@ -149,17 +131,12 @@ public class ModuleWeaver
             //}
 
             var moduleDefinition = CheckIfModuleDefinitionIsSet();
-            var nunitAssembly = moduleDefinition.ReferencedAssembly(NUnitFrameworkAssembly);
-
-            var timeoutAttribute = LoadTypeDefinition(nunitAssembly, NUnitFrameworkNamespace, TimoutAttribute);
-            var testFixtureAttribute = LoadTypeDefinition(nunitAssembly, NUnitFrameworkNamespace, TestFixtureAttribute);
-
-
+            var nunitDefinition = new NUnitDefinition(moduleDefinition);
 
             var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
             var moduleDefinitions = assemblyDefinition.ModuleDefinitions();
-            var types = moduleDefinitions.TypeDefinitionsWithAttribute(testFixtureAttribute);
-            types.ForEach(td => SetTimeout(moduleDefinition, td, timeoutAttribute));
+            var types = moduleDefinitions.TypeDefinitionsWithAttribute(nunitDefinition.TestFixtureAttribute);
+            types.ForEach(td => SetTimeout(moduleDefinition, td, nunitDefinition.TimeoutAttribute));
         }
         catch (Exception ex)
         {

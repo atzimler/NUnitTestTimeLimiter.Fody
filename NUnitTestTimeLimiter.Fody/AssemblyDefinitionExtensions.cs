@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Mono.Cecil;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +11,7 @@ namespace NUnitTestTimeLimiter.Fody
         private static AssemblyDefinition ResolveAssemblyNameReference([NotNull] string assemblyFullName)
         {
             var assembly = Assembly.Load(assemblyFullName);
-            var assemblyUri = new Uri(assembly.CodeBase);
+            var assemblyUri = new AssemblyUri(assembly?.CodeBase);
             if (!assemblyUri.IsFile)
             {
                 return null;
@@ -20,10 +19,10 @@ namespace NUnitTestTimeLimiter.Fody
 
             var assemblyFilePath = assemblyUri.LocalPath;
             var moduleDefinition = ModuleDefinition.ReadModule(assemblyFilePath);
-            return moduleDefinition.Assembly;
+            return moduleDefinition?.Assembly;
         }
 
-        private static void MapAssemblyReferences(string assemblyFullName, [NotNull] Queue<string> unprocessedAssemblies)
+        private static void MapAssemblyReferences([NotNull] string assemblyFullName, [NotNull] Queue<string> unprocessedAssemblies)
         {
             var assembly = ResolveAssemblyNameReference(assemblyFullName);
             var mainModule = assembly?.MainModule;
@@ -46,6 +45,8 @@ namespace NUnitTestTimeLimiter.Fody
             return modules.Where(m => m != null);
         }
 
+        [NotNull]
+        [ItemNotNull]
         public static IEnumerable<AssemblyDefinition> ReferencedAssemblies([NotNull] this AssemblyDefinition assemblyDefinition)
         {
             var unprocessedAssemblies = new Queue<string>();
@@ -55,7 +56,7 @@ namespace NUnitTestTimeLimiter.Fody
             while (unprocessedAssemblies.Count > 0)
             {
                 var assemblyFullName = unprocessedAssemblies.Dequeue();
-                if (processedAssemblies.Contains(assemblyFullName))
+                if (assemblyFullName == null || processedAssemblies.Contains(assemblyFullName))
                 {
                     continue;
                 }
@@ -63,7 +64,11 @@ namespace NUnitTestTimeLimiter.Fody
                 MapAssemblyReferences(assemblyFullName, unprocessedAssemblies);
 
                 processedAssemblies.Add(assemblyFullName);
-                yield return ResolveAssemblyNameReference(assemblyFullName);
+                var item = ResolveAssemblyNameReference(assemblyFullName);
+                if (item != null)
+                {
+                    yield return item;
+                }
             }
         }
 

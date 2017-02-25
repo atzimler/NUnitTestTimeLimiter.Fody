@@ -36,7 +36,7 @@ namespace NUnitTestTimeLimiter.Fody
 
         public static AssemblyDefinition ReferencedAssembly(this ModuleDefinition moduleDefinition, string assemblyName)
         {
-            return moduleDefinition?.Assembly?.ReferencedAssemblies()?.FirstOrDefault(ad => AreAssemblyNamesEqual(ad, assemblyName));
+            return moduleDefinition?.Assembly?.ReferencedAssemblies().FirstOrDefault(ad => AreAssemblyNamesEqual(ad, assemblyName));
         }
 
         [NotNull]

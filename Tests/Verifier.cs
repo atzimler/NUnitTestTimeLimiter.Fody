@@ -13,6 +13,9 @@ namespace Tests
         {
             var before = Validate(beforeAssemblyPath);
             var after = Validate(afterAssemblyPath);
+            Assert.IsNotNull(before);
+            Assert.IsNotNull(after);
+
             var message = $"Failed processing {Path.GetFileName(afterAssemblyPath)}\r\n{after}";
             Assert.AreEqual(TrimLineNumbers(before), TrimLineNumbers(after), message);
         }

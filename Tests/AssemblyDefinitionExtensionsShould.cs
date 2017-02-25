@@ -37,6 +37,8 @@ namespace Tests
         [Test]
         public void ReturnCorrectReferencedAssemblies()
         {
+            Assert.IsNotNull(_assemblyDefinition);
+
             var referencedAssemblies = _assemblyDefinition.ReferencedAssemblies();
             foreach (var assembly in referencedAssemblies)
             {
