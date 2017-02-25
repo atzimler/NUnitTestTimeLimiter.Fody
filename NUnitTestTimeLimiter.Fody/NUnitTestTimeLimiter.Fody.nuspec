@@ -11,16 +11,15 @@
     <projectUrl>http://github.com/Fody/BasicFodyAddin</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://raw.github.com/Fody/BasicFodyAddin/master/Icons/package_icon.png</iconUrl>
+    <summary>Automatically apply Timeout attribute to TestFixture classes.</summary>
     <description>
 Fody add-in for weaving NUnit Timeout tags on the TestFixture classes with a global maximum. Depending on your setting the slow unit tests are going to fail after the timeout period.
       
-The goal is to catch all incorrectly written NUnit tests to execute quickly and thus provide the possibility to use them in TDD scenario.    
+The goal is to catch all incorrectly written NUnit tests and to force them to execute quickly. This will provide the possibility to use the test set in TDD scenario. By not installing the weaver into some of the test assemblies, you can build integration unit tests, which you can leave out from the TDD process and run them only on your build server.
     </description>
-    <summary />
-    <language>en-AU</language>
     <tags>ILWeaving, Fody, Cecil, NUnit, Timeout</tags>
     <dependencies>
-      <dependency id="Fody"/>
+      <dependency id="Fody" version="[1.29"/>
     </dependencies>
   </metadata>
 </package>
