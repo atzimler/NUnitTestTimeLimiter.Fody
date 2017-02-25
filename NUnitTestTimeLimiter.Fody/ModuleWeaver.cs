@@ -4,12 +4,19 @@ using NUnit.Framework;
 using NUnitTestTimeLimiter.Fody;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Xml.Linq;
+using Mono.Cecil.Rocks;
 using MoreLinq;
 
 // ReSharper disable once CheckNamespace => This is the convention suggested by the BasicFodyAddin Fody template.
 public class ModuleWeaver
 {
+    private const string NUnitFramework = "NUnit.Framework";
+    private const string TimoutAttribute = "TimeoutAttribute";
+    private const string TestFixtureAttribute = "TestFixtureAttribute";
+
+
     private const int DefaultTimeLimit = 2000;
     private static int _timeLimit = DefaultTimeLimit;
 
@@ -96,15 +103,15 @@ public class ModuleWeaver
     {
         try
         {
-            var configurationAttributes = Config.Attributes();
-            foreach (var a in configurationAttributes)
-            {
-                int timeLimit;
-                if (a.Name == "TimeLimit" && int.TryParse(a.Value, out timeLimit))
-                {
-                    _timeLimit = timeLimit;
-                }
-            }
+            //var configurationAttributes = Config.Attributes();
+            //foreach (var a in configurationAttributes)
+            //{
+            //    int timeLimit;
+            //    if (a.Name == "TimeLimit" && int.TryParse(a.Value, out timeLimit))
+            //    {
+            //        _timeLimit = timeLimit;
+            //    }
+            //}
 
             var moduleDefinition = ModuleDefinition;
             if (moduleDefinition == null)
