@@ -1,7 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project name="NUnitTestTimeLimiter.xml" default="help">
+<project name="NUnitTestTimeLimiter.xml" default="help" xmlns="http://nant.sf.net/release/0.92/nant.xsd">
   <description>Build file for NUnitTestTimeLimiter Fody weaver.</description>
   
   <property name="project.name" value="NUnitTestTimeLimiter"/>
   <include buildfile="../NAnt/ATZ.Build.xml"/>
+
+  <target name="mergedlls">
+    <property name="ilmerge" value="C:\Program Files (x86)\Microsoft\ILMerge\ILMerge.exe"/>
+    <property name="weaver.name" value="NUnitTestTimeLimiter.Fody"/>
+    <property name="build.dir" value="${solutiondir}/${weaver.name}/bin/Debug"/>
+
+    <exec workingdir="${build.dir}" program="${ilmerge}">
+      <arg value="/targetplatform:v4"/>
+      <arg value="/out:tmp.dll"/>
+      <arg value="NUnitTestTimeLimiter.Fody.dll"/>
+      <arg value="MoreLinq.dll"/>
+      <arg value="JetBrains.Annotations.dll"/>
+      <arg value="/internalize"/>
+    </exec>
+    
+    <delete file="${build.dir}/${weaver.name}.dll"/>
+    <move file="${build.dir}/tmp.dll" tofile="${build.dir}/${weaver.name}.dll"/>
+
+    <call target="nuget"/>
+  </target>
 </project>
