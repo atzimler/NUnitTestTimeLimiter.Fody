@@ -19,7 +19,7 @@ The goal is to catch all incorrectly written NUnit tests and to force them to ex
     </description>
     <tags>ILWeaving, Fody, Cecil, NUnit, Timeout</tags>
     <dependencies>
-      <dependency id="Fody" version="[1.29"/>
+      <dependency id="Fody" version="1.29"/>
     </dependencies>
   </metadata>
 </package>
