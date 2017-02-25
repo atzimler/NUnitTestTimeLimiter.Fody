@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using NUnitTestTimeLimiter.Fody;
+using System;
+using System.Linq;
 
 namespace Tests
 {
@@ -30,5 +30,25 @@ namespace Tests
             var types = moduleDefinitions.TypeDefinitionsWithAttribute(testFixtureAttribute);
             Assert.AreEqual(4, types.Count());
         }
+
+        [Test]
+        public void ResolveAssemblyCorrectlyIfExists()
+        {
+            var assembly = ModuleDefinition.ReferencedAssembly("nunit.framework");
+            Assert.IsNotNull(assembly);
+        }
+
+        [Test]
+        public void ResolveAssemblyCorrectlyIfExistsButWithDifferentCase()
+        {
+            Assert.IsNotNull(ModuleDefinition.ReferencedAssembly("NUniT.FrAmEwOrK"));
+        }
+
+        [Test]
+        public void UnresolveNonExistingReference()
+        {
+            Assert.IsNull(ModuleDefinition.ReferencedAssembly("This.Should.Not.Be.A.Valid.Assembly"));
+        }
+
     }
 }

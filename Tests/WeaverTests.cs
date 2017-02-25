@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using AssemblyToProcess;
+﻿using AssemblyToProcess;
+using JetBrains.Annotations;
 using NUnit.Framework;
+using NUnitTestTimeLimiter.Fody;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
 
 namespace Tests
 {
@@ -91,6 +92,18 @@ namespace Tests
         {
             Assert.IsTrue(HasTimeoutAttribute(typeof(TestFixtureWithHigherTimeout)));
             Assert.AreEqual(2000, Timeout(typeof(TestFixtureWithHigherTimeout)));
+        }
+
+        [Test]
+        public void TheWayToResolveNUnitAttributesWithoutNUnitReference()
+        {
+            var nunitAssembly = ModuleDefinition.ReferencedAssembly("nunit.framework");
+            Assert.IsNotNull(nunitAssembly);
+
+            var timeoutAttribute = nunitAssembly.MainModule.GetType("NUnit.Framework", "TimeoutAttribute");
+            Assert.IsNotNull(timeoutAttribute);
+
+            //var nunitAssembly = ModuleDefinition.Assembly.ReferencedAssemblies().FirstOrDefault(a => a.Name)
         }
 
 

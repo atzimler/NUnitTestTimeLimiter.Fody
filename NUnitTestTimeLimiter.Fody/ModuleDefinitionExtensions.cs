@@ -8,6 +8,12 @@ namespace NUnitTestTimeLimiter.Fody
 {
     public static class ModuleDefinitionExtensions
     {
+        private static bool AreAssemblyNamesEqual(AssemblyDefinition assemblyDefinition, string assemblyName)
+        {
+            var name = assemblyDefinition?.Name?.Name;
+            return string.Compare(name, assemblyName, StringComparison.InvariantCultureIgnoreCase) == 0;
+        }
+
         public static AssemblyDefinition AssemblyDefinition(this ModuleDefinition moduleDefinition)
         {
             if (moduleDefinition == null)
@@ -26,6 +32,11 @@ namespace NUnitTestTimeLimiter.Fody
             var types = modules.SelectMany(m => m.Types);
             var typeDefinitions = types.Where(t => t?.FullName == typeRefence?.FullName).Take(2).ToList();
             return typeDefinitions.Count != 1 ? null : typeDefinitions[0];
+        }
+
+        public static AssemblyDefinition ReferencedAssembly(this ModuleDefinition moduleDefinition, string assemblyName)
+        {
+            return moduleDefinition?.Assembly?.ReferencedAssemblies()?.FirstOrDefault(ad => AreAssemblyNamesEqual(ad, assemblyName));
         }
 
         [NotNull]

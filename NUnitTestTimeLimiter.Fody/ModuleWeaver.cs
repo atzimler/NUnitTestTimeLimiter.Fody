@@ -119,6 +119,8 @@ public class ModuleWeaver
                 throw new InvalidOperationException($"{nameof(ModuleDefinition)} == null");
             }
 
+            //var nunitAssembly = moduleDefinition.ReferencedAssembly("nunit.framework");
+
             var testFixtureAttribute = moduleDefinition.ImportReference(typeof(TestFixtureAttribute));
 
             var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
