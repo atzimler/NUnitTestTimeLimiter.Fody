@@ -135,6 +135,7 @@ public class ModuleWeaver
             var nunitDefinition = new NUnitDefinition(moduleDefinition);
             if (!nunitDefinition.NUnitPresent)
             {
+                // TODO: Show warning on the build that we have no NUnit reference.
                 return;
             }
 
