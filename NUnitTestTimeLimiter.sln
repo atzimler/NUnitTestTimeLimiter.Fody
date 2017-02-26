@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{5A86453B-96FB-4B6E-A283-225BB9F753D3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcess", "AssemblyToProcess\AssemblyToProcess.csproj", "{E97E649F-B703-47E3-B18A-0871D3498742}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7943A2A9-B800-47B3-8E7E-55CAB0B86D24}"
@@ -15,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestTimeLimiter.Fody", "NUnitTestTimeLimiter.Fody\NUnitTestTimeLimiter.Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestTimeLimiter.Fody.Tests", "NUnitTestTimeLimiter.Fody.Tests\NUnitTestTimeLimiter.Fody.Tests.csproj", "{5A86453B-96FB-4B6E-A283-225BB9F753D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +23,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Release|x86.ActiveCfg = Release|Any CPU
 		{E97E649F-B703-47E3-B18A-0871D3498742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E97E649F-B703-47E3-B18A-0871D3498742}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E97E649F-B703-47E3-B18A-0871D3498742}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -43,6 +37,14 @@ Global
 		{C3578A7B-09A6-4444-9383-0DEAFA4958BD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C3578A7B-09A6-4444-9383-0DEAFA4958BD}.Release|x86.ActiveCfg = Release|Any CPU
 		{C3578A7B-09A6-4444-9383-0DEAFA4958BD}.Release|x86.Build.0 = Release|Any CPU
+		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Debug|x86.Build.0 = Debug|Any CPU
+		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Release|x86.ActiveCfg = Release|Any CPU
+		{5A86453B-96FB-4B6E-A283-225BB9F753D3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
