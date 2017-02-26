@@ -134,7 +134,7 @@ public class ModuleWeaver
             if (!nunitDefinition.NUnitPresent)
             {
                 LogWarning(
-                    $"No NUnit reference in the assembly, exiting NUnitTestTimeLimiter (this assembly should not have this Fody module installed).");
+                    $"No NUnit reference in the assembly, exiting ${ModuleConstants.ModuleName} (this assembly should not have this Fody module installed).");
                 return;
             }
 
