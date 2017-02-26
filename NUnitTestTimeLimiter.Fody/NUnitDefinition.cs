@@ -11,6 +11,7 @@ namespace NUnitTestTimeLimiter.Fody
         private const string TimeoutAttributeName = "TimeoutAttribute";
         private const string TestFixtureAttributeName = "TestFixtureAttribute";
 
+        public bool NUnitPresent { get; private set; } = true;
         public TypeDefinition TimeoutAttribute { get; }
         public TypeDefinition TestFixtureAttribute { get; }
 
@@ -36,6 +37,7 @@ namespace NUnitTestTimeLimiter.Fody
             var nunitAssembly = moduleDefinition?.ReferencedAssembly(NUnitFrameworkAssembly);
             if (nunitAssembly == null)
             {
+                NUnitPresent = false;
                 return;
             }
 

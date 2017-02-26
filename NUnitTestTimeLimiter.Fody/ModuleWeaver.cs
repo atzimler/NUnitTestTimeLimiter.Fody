@@ -133,6 +133,10 @@ public class ModuleWeaver
 
             var moduleDefinition = CheckIfModuleDefinitionIsSet();
             var nunitDefinition = new NUnitDefinition(moduleDefinition);
+            if (!nunitDefinition.NUnitPresent)
+            {
+                return;
+            }
 
             var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
             var moduleDefinitions = assemblyDefinition.ModuleDefinitions();
