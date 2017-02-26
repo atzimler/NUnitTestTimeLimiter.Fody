@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Mono.Cecil;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -10,16 +11,25 @@ namespace NUnitTestTimeLimiter.Fody
     {
         private static AssemblyDefinition ResolveAssemblyNameReference([NotNull] string assemblyFullName)
         {
-            var assembly = Assembly.Load(assemblyFullName);
-            var assemblyUri = new AssemblyUri(assembly?.CodeBase);
-            if (!assemblyUri.IsFile)
+            try
             {
+
+                var assembly = Assembly.Load(assemblyFullName);
+                var assemblyUri = new AssemblyUri(assembly?.CodeBase);
+                if (!assemblyUri.IsFile)
+                {
+                    return null;
+                }
+
+                var assemblyFilePath = assemblyUri.LocalPath;
+                var moduleDefinition = ModuleDefinition.ReadModule(assemblyFilePath);
+                return moduleDefinition?.Assembly;
+            }
+            catch (FileNotFoundException)
+            {
+                // TODO: Add info into the build (not warning!) that the DLL was not found.
                 return null;
             }
-
-            var assemblyFilePath = assemblyUri.LocalPath;
-            var moduleDefinition = ModuleDefinition.ReadModule(assemblyFilePath);
-            return moduleDefinition?.Assembly;
         }
 
         private static void MapAssemblyReferences([NotNull] string assemblyFullName, [NotNull] Queue<string> unprocessedAssemblies)
