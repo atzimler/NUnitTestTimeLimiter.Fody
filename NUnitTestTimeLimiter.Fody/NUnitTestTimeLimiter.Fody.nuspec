@@ -7,10 +7,10 @@
     <authors>Attila Tamas Zimler</authors>
     <owners>Attila Tamas Zimler</owners>
     <developmentDependency>true</developmentDependency>
-    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
-    <projectUrl>http://github.com/Fody/BasicFodyAddin</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/atzimler/NUnitTestTimeLimiter.Fody/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/atzimler/NUnitTestTimeLimiter.Fody</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://raw.github.com/Fody/BasicFodyAddin/master/Icons/package_icon.png</iconUrl>
+    <iconUrl>https://github.com/atzimler/NUnitTestTimeLimiter.Fody/blob/master/Icons/Icon.png</iconUrl>
     <summary>Automatically apply Timeout attribute to TestFixture classes.</summary>
     <description>
 Fody add-in for weaving NUnit Timeout tags on the TestFixture classes with a global maximum. Depending on your setting the slow unit tests are going to fail after the timeout period.
