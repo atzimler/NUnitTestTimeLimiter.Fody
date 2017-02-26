@@ -13,23 +13,27 @@ namespace NUnitTestTimeLimiter.Fody
         {
             try
             {
-
-                var assembly = Assembly.Load(assemblyFullName);
-                var assemblyUri = new AssemblyUri(assembly?.CodeBase);
-                if (!assemblyUri.IsFile)
-                {
-                    return null;
-                }
-
-                var assemblyFilePath = assemblyUri.LocalPath;
-                var moduleDefinition = ModuleDefinition.ReadModule(assemblyFilePath);
-                return moduleDefinition?.Assembly;
+                return ResolveAssemblyNameReferenceUnsafe(assemblyFullName);
             }
             catch (FileNotFoundException)
             {
                 // TODO: Add info into the build (not warning!) that the DLL was not found.
                 return null;
             }
+        }
+
+        private static AssemblyDefinition ResolveAssemblyNameReferenceUnsafe([NotNull] string assemblyFullName)
+        {
+            var assembly = Assembly.Load(assemblyFullName);
+            var assemblyUri = new AssemblyUri(assembly?.CodeBase);
+            if (!assemblyUri.IsFile)
+            {
+                return null;
+            }
+
+            var assemblyFilePath = assemblyUri.LocalPath;
+            var moduleDefinition = ModuleDefinition.ReadModule(assemblyFilePath);
+            return moduleDefinition?.Assembly;
         }
 
         private static void MapAssemblyReferences([NotNull] string assemblyFullName, [NotNull] Queue<string> unprocessedAssemblies)

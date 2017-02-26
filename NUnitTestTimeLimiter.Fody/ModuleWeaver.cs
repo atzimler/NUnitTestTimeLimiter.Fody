@@ -2,7 +2,6 @@
 using Mono.Cecil;
 using NUnitTestTimeLimiter.Fody;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using Mono.Cecil.Rocks;
@@ -64,6 +63,29 @@ public class ModuleWeaver
         return ModuleDefinition;
     }
 
+    private static CustomAttributeArgument CreateMaxTimeLimitArgument([NotNull] ModuleDefinition moduleDefinition)
+    {
+        return new CustomAttributeArgument(moduleDefinition.TypeSystem?.Int32, _timeLimit);
+    }
+
+    private void ParseConfiguration()
+    {
+        var configurationAttributes = Config?.Attributes() ?? Enumerable.Empty<XAttribute>();
+        foreach (var a in configurationAttributes.Where(a => a != null))
+        {
+            ParseTimeLimitConfiguration(a);
+        }
+    }
+
+    private static void ParseTimeLimitConfiguration([NotNull] XAttribute a)
+    {
+        int timeLimit;
+        if (a.Name == "TimeLimit" && int.TryParse(a.Value, out timeLimit))
+        {
+            _timeLimit = timeLimit;
+        }
+    }
+
     private static void SetTimeout(
         [NotNull] ModuleDefinition moduleDefinition,
         TypeDefinition typeDefinition,
@@ -90,7 +112,7 @@ public class ModuleWeaver
         [NotNull] TypeDefinition timeoutAttribute)
     {
         var attritube = typeDefinition.Attribute(timeoutAttribute);
-        var maxTimeLimitArgument = new CustomAttributeArgument(moduleDefinition.TypeSystem?.Int32, _timeLimit);
+        var maxTimeLimitArgument = CreateMaxTimeLimitArgument(moduleDefinition);
         if (attritube?.ConstructorArguments == null)
         {
             return;
@@ -117,21 +139,12 @@ public class ModuleWeaver
     {
         try
         {
-            var configurationAttributes = Config?.Attributes() ?? Enumerable.Empty<XAttribute>();
-            foreach (var a in configurationAttributes.Where(a => a != null))
-            {
-                int timeLimit;
-                if (a.Name == "TimeLimit" && int.TryParse(a.Value, out timeLimit))
-                {
-                    _timeLimit = timeLimit;
-                }
-            }
-
+            ParseConfiguration();
 
 
             var moduleDefinition = CheckIfModuleDefinitionIsSet();
             var nunitDefinition = new NUnitDefinition(moduleDefinition);
-            if (!nunitDefinition.NUnitPresent)
+            if (!nunitDefinition.NUnitPresent || nunitDefinition.TimeoutAttribute == null)
             {
                 LogWarning(
                     $"No NUnit reference in the assembly, exiting ${ModuleConstants.ModuleName} (this assembly should not have this Fody module installed).");
@@ -149,4 +162,5 @@ public class ModuleWeaver
             throw;
         }
     }
+
 }
