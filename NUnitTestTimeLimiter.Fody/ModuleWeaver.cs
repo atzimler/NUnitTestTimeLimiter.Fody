@@ -3,6 +3,7 @@ using Mono.Cecil;
 using NUnitTestTimeLimiter.Fody;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Mono.Cecil.Rocks;
@@ -120,15 +121,21 @@ public class ModuleWeaver
     {
         try
         {
-            //var configurationAttributes = Config.Attributes();
-            //foreach (var a in configurationAttributes)
-            //{
-            //    int timeLimit;
-            //    if (a.Name == "TimeLimit" && int.TryParse(a.Value, out timeLimit))
-            //    {
-            //        _timeLimit = timeLimit;
-            //    }
-            //}
+            using (var x = File.CreateText(@"c:\Users\NUnitTestTimeLimiter.Fody.debug"))
+            {
+                x.WriteLine(Config.Name);
+                //var configurationAttributes = Config.Attributes();
+                //foreach (var a in configurationAttributes)
+                //{
+                //    int timeLimit;
+                //    if (a.Name == "TimeLimit" && int.TryParse(a.Value, out timeLimit))
+                //    {
+                //        _timeLimit = timeLimit;
+                //    }
+                //}
+
+            }
+
 
             var moduleDefinition = CheckIfModuleDefinitionIsSet();
             var nunitDefinition = new NUnitDefinition(moduleDefinition);
