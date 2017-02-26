@@ -120,7 +120,7 @@ public class ModuleWeaver
     {
         try
         {
-            using (var x = File.CreateText(@"c:\Users\NUnitTestTimeLimiter.Fody.debug"))
+            using (var x = File.CreateText(@"d:\NUnitTestTimeLimiter.Fody.debug"))
             {
                 x.WriteLine(Config.Name);
                 //var configurationAttributes = Config.Attributes();
