@@ -12,15 +12,12 @@
 
     <exec workingdir="${build.dir}" program="${ilmerge}">
       <arg value="/targetplatform:v4"/>
-      <arg value="/out:tmp.dll"/>
-      <arg value="NUnitTestTimeLimiter.Fody.dll"/>
+      <arg value="/out:${weaver.name}.dll"/>
+      <arg value="NUnitTestTimeLimiter.dll"/>
       <arg value="MoreLinq.dll"/>
       <arg value="JetBrains.Annotations.dll"/>
       <arg value="/internalize"/>
     </exec>
-    
-    <delete file="${build.dir}/${weaver.name}.dll"/>
-    <copy file="${build.dir}/tmp.dll" tofile="${build.dir}/${weaver.name}.dll"/>
 
     <call target="nuget"/>
   </target>
