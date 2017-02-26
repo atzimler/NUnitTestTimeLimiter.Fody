@@ -22,4 +22,10 @@ The goal is to catch all incorrectly written NUnit tests and to force them to ex
       <dependency id="Fody" version="1.29.4"/>
     </dependencies>
   </metadata>
+
+  <files>
+    <file src="bin\Debug\NUnitTestTimeLimiter.Fody.dll" />
+    <file src="install.ps1" target="tools" />
+    <file src="uninstall.ps1" target="tools" />
+  </files>
 </package>
