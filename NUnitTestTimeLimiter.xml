@@ -20,7 +20,7 @@
     </exec>
     
     <delete file="${build.dir}/${weaver.name}.dll"/>
-    <move file="${build.dir}/tmp.dll" tofile="${build.dir}/${weaver.name}.dll"/>
+    <copy file="${build.dir}/tmp.dll" tofile="${build.dir}/${weaver.name}.dll"/>
 
     <call target="nuget"/>
   </target>
