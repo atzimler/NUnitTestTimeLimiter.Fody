@@ -20,6 +20,9 @@ public class ModuleWeaver
     [NotNull]
     public Action<string> LogInfo { get; set; }
 
+    [NotNull]
+    public Action<string> LogWarning { get; set; }
+
     // An instance of Mono.Cecil.ModuleDefinition for processing
     // ReSharper disable once MemberCanBePrivate.Global => Fody will use this when calling our module.
     // ReSharper disable once UnusedAutoPropertyAccessor.Global => Fody will use this when calling our module.
@@ -28,13 +31,8 @@ public class ModuleWeaver
     // Init logging delegates to make testing easier
     public ModuleWeaver()
     {
-        LogInfo = msg =>
-        {
-            if (msg != null)
-            {
-                Debug.WriteLine($"{ModuleConstants.ModuleName}: {msg}");
-            }
-        };
+        LogInfo = msg => { };
+        LogWarning = msg => { };
     }
 
     private static void AddTimeoutAttribute(
@@ -135,7 +133,8 @@ public class ModuleWeaver
             var nunitDefinition = new NUnitDefinition(moduleDefinition);
             if (!nunitDefinition.NUnitPresent)
             {
-                // TODO: Show warning on the build that we have no NUnit reference.
+                LogWarning(
+                    $"{ModuleConstants.ModuleName}: No NUnit reference in the assembly, exiting NUnitTestTimeLimiter (this assembly should not have this Fody module installed).");
                 return;
             }
 
