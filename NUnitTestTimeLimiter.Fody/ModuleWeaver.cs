@@ -12,13 +12,17 @@ public class ModuleWeaver
     private const int DefaultTimeLimit = 2000;
     private static int _timeLimit = DefaultTimeLimit;
 
+    // ReSharper disable once MemberCanBePrivate.Global => Fody will use this when calling our module.
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global => Fody will use this when calling our module.
     public XElement Config { get; set; }
 
-    // Will log an informational message to MSBuild
     // ReSharper disable once MemberCanBePrivate.Global => Fody will use this when calling our module.
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global => Fody will use this when calling our module.
     [NotNull]
     public Action<string> LogInfo { get; set; }
 
+    // ReSharper disable once MemberCanBePrivate.Global => Fody will use this when calling our module.
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global => Fody will use this when calling our module.
     [NotNull]
     public Action<string> LogWarning { get; set; }
 
