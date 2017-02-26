@@ -10,10 +10,13 @@
     <property name="weaver.name" value="NUnitTestTimeLimiter.Fody"/>
     <property name="build.dir" value="${solutiondir}/${weaver.name}/bin/Debug"/>
 
+    <delete file="${build.dir}/${weaver.name}2.dll"/>
+    <move file="${build.dir}/${weaver.name}.dll" tofile="${build.dir}/${weaver.name}2.dll"/>
+
     <exec workingdir="${build.dir}" program="${ilmerge}">
       <arg value="/targetplatform:v4"/>
       <arg value="/out:${weaver.name}.dll"/>
-      <arg value="NUnitTestTimeLimiter.dll"/>
+      <arg value="${weaver.name}2.dll"/>
       <arg value="MoreLinq.dll"/>
       <arg value="JetBrains.Annotations.dll"/>
       <arg value="/internalize"/>
