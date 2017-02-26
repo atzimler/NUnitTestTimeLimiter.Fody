@@ -17,7 +17,6 @@
       <arg value="/targetplatform:v4"/>
       <arg value="/out:${weaver.name}.dll"/>
       <arg value="${weaver.name}2.dll"/>
-      <arg value="MoreLinq.dll"/>
       <arg value="JetBrains.Annotations.dll"/>
       <arg value="/internalize"/>
     </exec>

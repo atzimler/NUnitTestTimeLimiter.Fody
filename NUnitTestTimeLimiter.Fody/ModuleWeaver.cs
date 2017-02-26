@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Mono.Cecil.Rocks;
-using MoreLinq;
 
 // ReSharper disable once CheckNamespace => This is the convention suggested by the BasicFodyAddin Fody template.
 public class ModuleWeaver
@@ -143,7 +142,7 @@ public class ModuleWeaver
             var assemblyDefinition = ModuleDefinition.AssemblyDefinition();
             var moduleDefinitions = assemblyDefinition.ModuleDefinitions();
             var types = moduleDefinitions.TypeDefinitionsWithAttribute(nunitDefinition.TestFixtureAttribute);
-            types.ForEach(td => SetTimeout(moduleDefinition, td, nunitDefinition.TimeoutAttribute));
+            types.ToList().ForEach(td => SetTimeout(moduleDefinition, td, nunitDefinition.TimeoutAttribute));
         }
         catch (Exception ex)
         {
