@@ -1,9 +1,8 @@
 ﻿using AssemblyToProcess;
 using Mono.Cecil;
 using NUnit.Framework;
-using NUnitTestTimeLimiter.Fody;
 
-namespace Tests
+namespace NUnitTestTimeLimiter.Fody.Tests
 {
     [TestFixture]
     public class TypeDefinitionExtensions : WeaverTestBase

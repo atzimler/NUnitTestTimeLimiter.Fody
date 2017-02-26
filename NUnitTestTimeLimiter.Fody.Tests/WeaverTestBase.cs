@@ -2,7 +2,7 @@
 using System.IO;
 using Mono.Cecil;
 
-namespace Tests
+namespace NUnitTestTimeLimiter.Fody.Tests
 {
     public class WeaverTestBase
     {
@@ -12,10 +12,7 @@ namespace Tests
 
         protected void InitializeAssemblyReferences()
         {
-            var testDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            var projectPath = Path.GetFullPath(
-                Path.Combine(testDirectory, @"..\..\..\AssemblyToProcess\AssemblyToProcess.csproj"));
-            AssemblyPath = Path.Combine(Path.GetDirectoryName(projectPath), @"bin\Debug\AssemblyToProcess.dll");
+            AssemblyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"AssemblyToProcess.dll");
 #if (!DEBUG)
         assemblyPath = assemblyPath.Replace("Debug", "Release");
 #endif

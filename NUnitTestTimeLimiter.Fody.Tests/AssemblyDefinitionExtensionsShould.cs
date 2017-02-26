@@ -1,11 +1,10 @@
 ﻿using System;
-using Mono.Cecil;
-using NUnit.Framework;
-using NUnitTestTimeLimiter.Fody;
 using System.IO;
 using System.Linq;
+using Mono.Cecil;
+using NUnit.Framework;
 
-namespace Tests
+namespace NUnitTestTimeLimiter.Fody.Tests
 {
     [TestFixture]
     public class AssemblyDefinitionExtensionsShould : WeaverTestBase

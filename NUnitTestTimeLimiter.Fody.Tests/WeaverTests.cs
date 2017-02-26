@@ -1,13 +1,13 @@
-﻿using AssemblyToProcess;
-using JetBrains.Annotations;
-using NUnit.Framework;
-using NUnitTestTimeLimiter.Fody;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AssemblyToProcess;
+using JetBrains.Annotations;
+using NUnit.Framework;
+using Tests;
 
-namespace Tests
+namespace NUnitTestTimeLimiter.Fody.Tests
 {
     [TestFixture]
     public class WeaverTests : WeaverTestBase
