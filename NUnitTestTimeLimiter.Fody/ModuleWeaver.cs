@@ -122,7 +122,8 @@ public class ModuleWeaver
             var configurationAttributes = Config?.Attributes() ?? Enumerable.Empty<XAttribute>();
             foreach (var a in configurationAttributes.Where(a => a != null))
             {
-                if (a.Name == "TimeLimit" && int.TryParse(a.Value, out int timeLimit))
+                int timeLimit;
+                if (a.Name == "TimeLimit" && int.TryParse(a.Value, out timeLimit))
                 {
                     _timeLimit = timeLimit;
                 }
