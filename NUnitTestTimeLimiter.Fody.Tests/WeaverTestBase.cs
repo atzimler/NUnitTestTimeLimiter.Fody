@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using JetBrains.Annotations;
 using Mono.Cecil;
 
 namespace NUnitTestTimeLimiter.Fody.Tests
@@ -10,9 +11,9 @@ namespace NUnitTestTimeLimiter.Fody.Tests
         protected string NewAssemblyPath { get; private set; }
         protected string AssemblyPath { get; private set; }
 
-        protected void InitializeAssemblyReferences()
+        protected void InitializeAssemblyReferences([NotNull] string assemblyName = @"AssemblyToProcess.dll")
         {
-            AssemblyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"AssemblyToProcess.dll");
+            AssemblyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, assemblyName);
 #if (!DEBUG)
         assemblyPath = assemblyPath.Replace("Debug", "Release");
 #endif
