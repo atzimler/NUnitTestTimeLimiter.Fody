@@ -3,8 +3,10 @@ using Mono.Cecil;
 using NUnitTestTimeLimiter.Fody;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 using Mono.Cecil.Rocks;
+using ICustomAttributeProvider = Mono.Cecil.ICustomAttributeProvider;
 
 // ReSharper disable once CheckNamespace => This is the convention suggested by the BasicFodyAddin Fody template.
 public class ModuleWeaver
@@ -146,12 +148,13 @@ public class ModuleWeaver
             ParseConfiguration();
 
 
+
             var moduleDefinition = CheckIfModuleDefinitionIsSet();
             var nunitDefinition = new NUnitDefinition(moduleDefinition);
             if (!nunitDefinition.NUnitPresent || nunitDefinition.TimeoutAttribute == null)
             {
                 LogWarning(
-                    $"No NUnit reference in the assembly, exiting ${ModuleConstants.ModuleName} (this assembly should not have this Fody module installed).");
+                    $"No NUnit reference in the assembly, exiting {ModuleConstants.ModuleName} (this assembly should not have this Fody module installed).");
                 return;
             }
 
@@ -166,5 +169,4 @@ public class ModuleWeaver
             throw;
         }
     }
-
 }
