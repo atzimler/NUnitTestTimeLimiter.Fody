@@ -18,7 +18,7 @@ which you can leave out from the TDD process and run them only on your build ser
 ## Why not assembly level Timeout attribute?
 
 * Has no support for overriding developer preference. So if the developer sets the timeout to high value on the class,
-the assembly level configuration will be ignored. On the other hand, by having the configuration in an assembly it is easy to
+the assembly level configuration will be ignored. On the other hand, by not having the configuration in an assembly it is easy to
 enforce a value by the build server, without modifying the source code.
 
 Beside the main point, it is
