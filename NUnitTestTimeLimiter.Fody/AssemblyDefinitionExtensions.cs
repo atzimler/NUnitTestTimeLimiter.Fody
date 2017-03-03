@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Mono.Cecil;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,13 +9,6 @@ namespace NUnitTestTimeLimiter.Fody
 {
     public static class AssemblyDefinitionExtensions
     {
-        [NotNull]
-        [ItemNotNull]
-        private static readonly IEnumerable<Func<string, Assembly>> AssemblyLoadStrategies = new List<Func<string, Assembly>> {
-            TryStrategyAssemblyLoad,
-            TryStrategyLocateAssemblyFromCurrentDomainBaseDirectory
-        };
-
         private static void MapAssemblyReferences([NotNull] string assemblyFullName, [NotNull] Queue<string> unprocessedAssemblies)
         {
             var assembly = ResolveAssemblyNameReference(assemblyFullName);
@@ -34,47 +26,20 @@ namespace NUnitTestTimeLimiter.Fody
 
         private static AssemblyDefinition ResolveAssemblyNameReference([NotNull] string assemblyFullName)
         {
-            var assembly = ResolveAssembly(assemblyFullName);
-            var assemblyUri = new AssemblyUri(assembly?.CodeBase);
-            if (!assemblyUri.IsFile)
-            {
-                return null;
-            }
-
-            var assemblyFilePath = assemblyUri.LocalPath;
-            var moduleDefinition = ModuleDefinition.ReadModule(assemblyFilePath);
-            return moduleDefinition?.Assembly;
-        }
-
-        private static Assembly ResolveAssembly([NotNull] string assemblyFullName)
-        {
-            return AssemblyLoadStrategies
-                .Select(assemblyLoadStrategy => assemblyLoadStrategy(assemblyFullName))
-                .FirstOrDefault(assembly => assembly != null);
-        }
-
-        private static Assembly TryStrategyAssemblyLoad([NotNull] string assemblyFullName)
-        {
-            try
-            {
-                return Assembly.Load(assemblyFullName);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        private static Assembly TryStrategyLocateAssemblyFromCurrentDomainBaseDirectory([NotNull] string assemblyFullName)
-        {
             var assemblyName = new AssemblyName(assemblyFullName);
-            return Directory.GetFiles(
-                    AppDomain.CurrentDomain.BaseDirectory,
+            var assemblyFilePath = Directory.GetFiles(
+                    Directory.GetCurrentDirectory(),
                     $"{assemblyName.Name}.dll",
                     SearchOption.AllDirectories
                 )
-                .Select(Assembly.LoadFrom)
                 .FirstOrDefault();
+            if (assemblyFilePath == null)
+            {
+                return null;
+            }
+
+            var moduleDefinition = ModuleDefinition.ReadModule(assemblyFilePath);
+            return moduleDefinition?.Assembly;
         }
 
         [NotNull]

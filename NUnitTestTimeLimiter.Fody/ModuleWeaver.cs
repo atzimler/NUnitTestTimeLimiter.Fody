@@ -3,10 +3,8 @@ using Mono.Cecil;
 using NUnitTestTimeLimiter.Fody;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
 using Mono.Cecil.Rocks;
-using ICustomAttributeProvider = Mono.Cecil.ICustomAttributeProvider;
 
 // ReSharper disable once CheckNamespace => This is the convention suggested by the BasicFodyAddin Fody template.
 public class ModuleWeaver
@@ -146,6 +144,7 @@ public class ModuleWeaver
         try
         {
             ParseConfiguration();
+            ModuleConstants.LogWarning = LogWarning;
 
 
 
