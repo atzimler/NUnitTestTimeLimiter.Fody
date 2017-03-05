@@ -74,7 +74,6 @@
     </Compile>
     <Compile Include="AssemblyDefinitionExtensions.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="AssemblyUri.cs" />
     <Compile Include="ModuleConstants.cs" />
     <Compile Include="ModuleDefinitionExtensions.cs" />
     <Compile Include="ModuleWeaver.cs" />

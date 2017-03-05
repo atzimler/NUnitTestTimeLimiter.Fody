@@ -59,7 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyDefinitionExtensionsShould.cs" />
-    <Compile Include="AssemblyUriShould.cs" />
     <Compile Include="ModuleDefinitionExtensionsShould.cs" />
     <Compile Include="NUnitDefinitionShould.cs" />
     <Compile Include="TypeDefinitionExtensions.cs" />
