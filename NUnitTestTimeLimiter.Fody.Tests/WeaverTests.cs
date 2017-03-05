@@ -1,11 +1,10 @@
-﻿using System;
+﻿using AssemblyToProcess;
+using JetBrains.Annotations;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AssemblyToProcess;
-using JetBrains.Annotations;
-using NUnit.Framework;
-using Tests;
 
 namespace NUnitTestTimeLimiter.Fody.Tests
 {

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using NUnit.Framework;
 
-namespace Tests
+namespace NUnitTestTimeLimiter.Fody.Tests
 {
     public static class Verifier
     {
