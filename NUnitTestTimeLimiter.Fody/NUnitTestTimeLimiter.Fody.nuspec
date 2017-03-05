@@ -18,6 +18,9 @@ Fody add-in for weaving NUnit Timeout tags on the TestFixture classes with a glo
 The goal is to catch all incorrectly written NUnit tests and to force them to execute quickly. This will provide the possibility to use the test set in TDD scenario. By not installing the weaver into some of the test assemblies, you can build integration unit tests, which you can leave out from the TDD process and run them only on your build server.
     </description>
     <releaseNotes>
+- 1.0.2:
+* Migrating to ATZ.CecilExtensions.
+      
 - 1.0.1:
 * Fixed assembly resolution causing problems with NUnit reference detection in the target assembly.
     </releaseNotes>
