@@ -1,6 +1,6 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Mono.Cecil;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,19 +43,13 @@ namespace NUnitTestTimeLimiter.Fody
         private static AssemblyDefinition ResolveAssemblyNameReferenceFromDirectory([NotNull] string assemblyFullName, [NotNull] string directory)
         {
             var assemblyName = new AssemblyName(assemblyFullName);
-            var assemblyFilePath = Directory.GetFiles(
-                    directory,
-                    $"{assemblyName.Name}.dll",
-                    SearchOption.AllDirectories
-                )
-                .FirstOrDefault();
-            if (assemblyFilePath == null)
-            {
-                return null;
-            }
-
-            var moduleDefinition = ModuleDefinition.ReadModule(assemblyFilePath);
-            return moduleDefinition?.Assembly;
+            return Directory
+                .GetFiles(directory, $"{assemblyName.Name}.dll", SearchOption.AllDirectories)
+                .Select(ModuleDefinition.ReadModule)
+                .Where(md => md != null)
+                .Select(md => md.Assembly)
+                .Where(a => a != null)
+                .FirstOrDefault(a => a.FullName == assemblyFullName);
         }
 
         [NotNull]
