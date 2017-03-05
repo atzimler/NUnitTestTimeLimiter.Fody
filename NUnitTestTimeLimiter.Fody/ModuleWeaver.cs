@@ -4,6 +4,7 @@ using NUnitTestTimeLimiter.Fody;
 using System;
 using System.Linq;
 using System.Xml.Linq;
+using ATZ.CecilExtensions;
 using Mono.Cecil.Rocks;
 
 // ReSharper disable once CheckNamespace => This is the convention suggested by the BasicFodyAddin Fody template.
@@ -50,7 +51,7 @@ public class ModuleWeaver
                 ctor =>
                     ctor.Parameters.Count == 1 &&
                     TypeReferenceExtensions.EqualsFullName(ctor.Parameters[0]?.ParameterType, moduleDefinition.TypeSystem?.Int32));
-        var attributeConstructor = moduleDefinition.ImportReference(attributeConstructorReference);
+        var attributeConstructor = moduleDefinition.Import(attributeConstructorReference);
         var attribute = new CustomAttribute(attributeConstructor);
         attribute.ConstructorArguments?.Add(new CustomAttributeArgument(moduleDefinition.TypeSystem?.Int32, _timeLimit));
         typeDefinition.CustomAttributes?.Add(attribute);
