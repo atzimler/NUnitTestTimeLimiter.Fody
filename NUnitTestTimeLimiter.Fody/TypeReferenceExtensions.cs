@@ -2,7 +2,7 @@
 
 namespace NUnitTestTimeLimiter.Fody
 {
-    public class TypeReferenceExtensions
+    public static class TypeReferenceExtensions
     {
         public static bool EqualsFullName(TypeReference left, TypeReference right)
         {
