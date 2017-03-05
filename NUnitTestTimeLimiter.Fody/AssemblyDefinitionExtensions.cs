@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Mono.Cecil;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,14 @@ namespace NUnitTestTimeLimiter.Fody
 {
     public static class AssemblyDefinitionExtensions
     {
+        [NotNull]
+        [ItemNotNull]
+        private static readonly List<string> AssemblySearchDirectories = new List<string>
+        {
+            Directory.GetCurrentDirectory(),
+            AppDomain.CurrentDomain.BaseDirectory
+        };
+
         private static void MapAssemblyReferences([NotNull] string assemblyFullName, [NotNull] Queue<string> unprocessedAssemblies)
         {
             var assembly = ResolveAssemblyNameReference(assemblyFullName);
@@ -26,9 +35,16 @@ namespace NUnitTestTimeLimiter.Fody
 
         private static AssemblyDefinition ResolveAssemblyNameReference([NotNull] string assemblyFullName)
         {
+            return AssemblySearchDirectories
+                .Select(d => ResolveAssemblyNameReferenceFromDirectory(assemblyFullName, d))
+                .FirstOrDefault(ad => ad != null);
+        }
+
+        private static AssemblyDefinition ResolveAssemblyNameReferenceFromDirectory([NotNull] string assemblyFullName, [NotNull] string directory)
+        {
             var assemblyName = new AssemblyName(assemblyFullName);
             var assemblyFilePath = Directory.GetFiles(
-                    Directory.GetCurrentDirectory(),
+                    directory,
                     $"{assemblyName.Name}.dll",
                     SearchOption.AllDirectories
                 )
