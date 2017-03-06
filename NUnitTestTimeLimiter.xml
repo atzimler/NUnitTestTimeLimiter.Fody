@@ -13,7 +13,7 @@
     <delete file="${build.dir}/${weaver.name}2.dll"/>
     <move file="${build.dir}/${weaver.name}.dll" tofile="${build.dir}/${weaver.name}2.dll"/>
 
-    <exec workingdir="${build.dir}" program="${ilmerge}">
+    <exec workingdir="${build.dir}" program="${ilmerge}" verbose="true">
       <arg value="/targetplatform:v4"/>
       <arg value="/out:${weaver.name}.dll"/>
       <arg value="${weaver.name}2.dll"/>
