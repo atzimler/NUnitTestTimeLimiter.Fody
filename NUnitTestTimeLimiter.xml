@@ -18,6 +18,7 @@
       <arg value="/out:${weaver.name}.dll"/>
       <arg value="${weaver.name}2.dll"/>
       <arg value="JetBrains.Annotations.dll"/>
+      <arg value="ATZ.CecilExtensions.dll"/>
       <arg value="/internalize"/>
     </exec>
 
