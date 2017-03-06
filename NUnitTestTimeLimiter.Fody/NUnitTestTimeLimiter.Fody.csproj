@@ -42,8 +42,8 @@
     <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ATZ.CecilExtensions, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ATZ.CecilExtensions.1.0.0.5\lib\net40\ATZ.CecilExtensions.dll</HintPath>
+    <Reference Include="ATZ.CecilExtensions, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ATZ.CecilExtensions.1.0.0.7\lib\net40\ATZ.CecilExtensions.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.3.0\lib\net\JetBrains.Annotations.dll</HintPath>

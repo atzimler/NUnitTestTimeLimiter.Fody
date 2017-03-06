@@ -153,8 +153,11 @@ public class ModuleWeaver
             var nunitDefinition = new NUnitDefinition(moduleDefinition);
             if (!nunitDefinition.NUnitPresent || nunitDefinition.TimeoutAttribute == null)
             {
-                LogWarning(
-                    $"No NUnit reference in the assembly, exiting {ModuleConstants.ModuleName} (this assembly should not have this Fody module installed).");
+                new[]
+                {
+                    $"No NUnit reference in the assembly, exiting {ModuleConstants.ModuleName} (this assembly should not have this Fody module installed).",
+                    "NUnit assembly must be located in any of the following directory or its subdirectories, to be able to analyze it. Otherwise will be considered unreferenced:"
+                }.Concat(AssemblyDefinitionExtensions.SearchDirectories).ToList().ForEach(LogWarning);
                 return;
             }
 
