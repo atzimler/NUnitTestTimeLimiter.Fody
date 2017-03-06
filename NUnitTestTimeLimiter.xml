@@ -24,6 +24,7 @@
       <arg value="/closed"/>
     </exec>
     <delete file="${build.dir}/${weaver.name}2.dll"/>
+    <delete file="${solutiondir}/*.nupkg"/>
 
     <property name="nugetextraswitches" value="-Tool"/>
     <call target="nuget"/>
