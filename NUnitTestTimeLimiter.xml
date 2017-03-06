@@ -21,6 +21,7 @@
       <arg value="ATZ.CecilExtensions.dll"/>
       <arg value="/internalize"/>
       <arg value="/log"/>
+      <arg value="/closed"/>
     </exec>
     <delete file="${build.dir}/${weaver.name}2.dll"/>
 
