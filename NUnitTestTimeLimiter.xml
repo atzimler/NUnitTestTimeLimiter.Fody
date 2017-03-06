@@ -20,6 +20,7 @@
       <arg value="JetBrains.Annotations.dll"/>
       <arg value="ATZ.CecilExtensions.dll"/>
       <arg value="/internalize"/>
+      <arg value="/log"/>
     </exec>
 
     <property name="nugetextraswitches" value="-Tool"/>
