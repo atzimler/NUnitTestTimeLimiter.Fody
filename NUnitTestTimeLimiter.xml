@@ -24,15 +24,24 @@
       <arg value="/closed"/>
     </exec>
     <delete file="${build.dir}/${weaver.name}2.dll"/>
-
-    <delete verbose="true">
-      <fileset>
-        <include name="${core.output}/*.nupkg"/>
-      </fileset>
-    </delete>
-
+    
     <property name="nugetextraswitches" value="-Tool"/>
     <call target="nuget"/>
+    <property name="publish2" value="true"/>
     <call target="publish"/>
+  </target>
+
+  <target name="publish.local">
+    <!--
+    Remove first round of nuget file, because first we need to ILMerge the content. This will prevent the first build run to push
+    the nupkg file into the package repository.
+    -->
+    <if test="${not property::exists('publish2')}">
+        <delete verbose="true">
+          <fileset>
+            <include name="${core.output}/*.nupkg"/>
+          </fileset>
+        </delete>
+    </if>
   </target>
 </project>
